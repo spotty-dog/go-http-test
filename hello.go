@@ -31,13 +31,28 @@ func JsonServ(w http.ResponseWriter, req *http.Request) {
 
 	data := ResponseType{
 		ID:   0,
-		Name: "brad",
+		Name: "Napolean Dynamite",
 	}
 
-	j, err := json.Marshal(data)
-	i, err := w.Write(j)
-	log.Printf("bytes written: %d", i)
+	pretty := req.URL.Query().Get("pretty")
+
+	j, err := marshalJson(data, pretty)
+
 	if err != nil {
-		log.Println("json write error: ", err)
+		log.Fatal("marshal error: ", err)
+	} else {
+		_, err := w.Write(j)
+		if err != nil {
+			log.Println("json write error: ", err)
+		}
+
+	}
+}
+
+func marshalJson(data ResponseType, pretty string) ([]byte, error) {
+	if pretty != "" {
+		return json.MarshalIndent(data, "", "    ")
+	} else {
+		return json.Marshal(data)
 	}
 }
