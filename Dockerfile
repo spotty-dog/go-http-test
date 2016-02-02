@@ -2,7 +2,7 @@ FROM gliderlabs/alpine
 
 EXPOSE 80
 
-ADD hello /hello
+ADD hello /bin/hello
 
 CMD ["hello"]
 
